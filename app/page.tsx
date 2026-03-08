@@ -28,7 +28,7 @@ interface Product {
   title: string;
   categoryName: string;
   subCategoryName: string;
-  imageUrls: string[];
+  imageUrls?: string[];
 }
 
 export default function Home() {
@@ -37,7 +37,7 @@ export default function Home() {
   const [subCategories, setSubCategories] = useState<string[]>([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const [selectedSubCategory, setSelectedSubCategory] = useState<
     string | undefined
@@ -172,7 +172,7 @@ export default function Home() {
                   <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                     <CardHeader className="p-0">
                       <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-muted">
-                        {product.imageUrls[0] && (
+                        {product.imageUrls?.[0] && (
                           <Image
                             src={product.imageUrls[0]}
                             alt={product.title}

@@ -21,18 +21,24 @@ interface Product {
 
 export default function ProductPage() {
   const searchParams = useSearchParams();
-  const productParam = searchParams.get('product');
+  const productParam = searchParams.get("product");
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    if (productParam) {
-      try {
-        const parsedProduct = JSON.parse(productParam);
-        setProduct(parsedProduct);
-      } catch (error) {
-        console.error('Failed to parse product data:', error);
+    if (!productParam) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(productParam);
+      if (!parsed?.stacklineSku || !parsed?.title) {
+        console.error("Invalid product data shape");
+        return;
       }
+      setProduct(parsed);
+    } catch (error) {
+      console.error("Failed to parse product data:", error);
     }
   }, [productParam]);
 
@@ -47,7 +53,9 @@ export default function ProductPage() {
             </Button>
           </Link>
           <Card className="p-8">
-            <p className="text-center text-muted-foreground">Product not found</p>
+            <p className="text-center text-muted-foreground">
+              Product not found
+            </p>
           </Card>
         </div>
       </div>
@@ -90,7 +98,7 @@ export default function ProductPage() {
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
                     className={`relative h-20 border-2 rounded-lg overflow-hidden ${
-                      selectedImage === idx ? 'border-primary' : 'border-muted'
+                      selectedImage === idx ? "border-primary" : "border-muted"
                     }`}
                   >
                     <Image
@@ -113,7 +121,9 @@ export default function ProductPage() {
                 <Badge variant="outline">{product.subCategoryName}</Badge>
               </div>
               <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
-              <p className="text-sm text-muted-foreground">SKU: {product.retailerSku}</p>
+              <p className="text-sm text-muted-foreground">
+                SKU: {product.retailerSku}
+              </p>
             </div>
 
             {product.featureBullets.length > 0 && (
