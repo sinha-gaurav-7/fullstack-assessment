@@ -77,6 +77,32 @@ Passing only the SKU fixes all three problems at the root rather than patching e
 
 ---
 
+## UX Improvements Suggested
+
+These are not bugs but noticeable UX issues observed while using the app.
+
+---
+
+### UX 1 — No Pagination on Product Listing Page
+
+The API supports `limit` and `offset` parameters but the listing page always fetches with a fixed `limit=20` and never loads more. If the dataset has more than 20 products, the user has no way to see them. There is no "Load More" button, no page numbers, and no indication that more products exist.
+
+**Suggestion:** Add pagination controls below the product grid using the `total` count already returned by `/api/products`. A simple Previous / Next button with a current page indicator would make the experience complete.
+
+---
+
+### UX 2 — Feature Card Height Inconsistent Across Products
+
+As seen in the product detail page, the Features card grows and shrinks depending on how many bullet points a product has. Products with a single feature get a very small card, while products with many features push the card very tall. This creates an inconsistent and unpolished layout.
+
+**Suggestion:** Set a fixed max height on the Features card and make the content scrollable when it overflows. This gives every product detail page the same visual structure regardless of how much content exists.
+
+```tsx
+<CardContent className="pt-6 max-h-72 overflow-y-auto">
+```
+
+---
+
 ## Summary
 
 | # | Issue | Files |
@@ -87,3 +113,5 @@ Passing only the SKU fixes all three problems at the root rather than patching e
 | 2a | Subcategory showing all options | `app/page.tsx` |
 | 2b | Stale subcategory on category switch | `app/page.tsx` |
 | 3 | Full product JSON in URL | `app/page.tsx`, `app/product/page.tsx` |
+| UX 1 | No pagination on listing page | `app/page.tsx` |
+| UX 2 | Inconsistent feature card height | `app/product/page.tsx` |
