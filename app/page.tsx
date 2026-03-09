@@ -166,10 +166,7 @@ return (
             {products.map((product) => (
               <Link
                 key={product.stacklineSku}
-                href={{
-                  pathname: "/product",
-                  query: { product: JSON.stringify(product) },
-                }}
+                href={`/product?sku=${encodeURIComponent(product.stacklineSku)}`}
               >
                 <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
                   <CardHeader className="p-0">

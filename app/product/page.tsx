@@ -21,26 +21,21 @@ interface Product {
 
 export default function ProductPage() {
   const searchParams = useSearchParams();
-  const productParam = searchParams.get("product");
+  const sku = searchParams.get("sku")?.trim();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    if (!productParam) {
-      return;
-    }
+    if (!sku) return;
 
-    try {
-      const parsed = JSON.parse(productParam);
-      if (!parsed?.stacklineSku || !parsed?.title) {
-        console.error("Invalid product data shape");
-        return;
-      }
-      setProduct(parsed);
-    } catch (error) {
-      console.error("Failed to parse product data:", error);
-    }
-  }, [productParam]);
+    fetch(`/api/products/${encodeURIComponent(sku)}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Product not found");
+        return res.json();
+      })
+      .then((data) => setProduct(data))
+      .catch((err) => console.error(err));
+  }, [sku]);
 
   if (!product) {
     return (
